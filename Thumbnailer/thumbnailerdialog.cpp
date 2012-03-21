@@ -23,8 +23,6 @@ ThumbnailerDialog::ThumbnailerDialog(QWidget *parent) :
 
 ThumbnailerDialog::~ThumbnailerDialog()
 {
-    delete scene;
-    delete gridLayout;
     delete ui;
 }
 
@@ -45,15 +43,18 @@ void ThumbnailerDialog::batchScale(QString dir){
     QSize newSize(ui->XSizeSpinBox->value(), ui->YSizeSpinBox->value());
     QDir directory(dir);
     QStringList fileList = directory.entryList(filters, QDir::Files);
-
+    QString finalDirectory = QString("%1x%2").arg(newSize.width()).arg(newSize.height());
     // make sure we were able to create the director
-    if(!directory.mkdir(QString("%1x%2").arg(newSize.width()).arg(newSize.height()))){
+    if(!directory.mkdir(finalDirectory)){
         return;
     }
+    QDir finalDir(dir);
+    finalDir.cd(finalDirectory);
 
+    qDebug(directory.absolutePath().toAscii());
     for(int i=0; i< fileList.size(); i++){
         QImage img(directory.absoluteFilePath(fileList.at(i)));
         img.scaled(newSize);
-        img.save()
+        //img.save(QString("%1").arg());
     }
 }
