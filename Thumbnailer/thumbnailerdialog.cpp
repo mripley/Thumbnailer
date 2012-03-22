@@ -44,6 +44,7 @@ void ThumbnailerDialog::batchScale(QString dir){
     QDir directory(dir);
     QStringList fileList = directory.entryList(filters, QDir::Files);
     QString finalDirectory = QString("%1x%2").arg(newSize.width()).arg(newSize.height());
+
     // make sure we were able to create the director
     if(!directory.mkdir(finalDirectory)){
         return;
@@ -51,10 +52,16 @@ void ThumbnailerDialog::batchScale(QString dir){
     QDir finalDir(dir);
     finalDir.cd(finalDirectory);
 
-    qDebug(directory.absolutePath().toAscii());
     for(int i=0; i< fileList.size(); i++){
-        QImage img(directory.absoluteFilePath(fileList.at(i)));
-        img.scaled(newSize);
-        //img.save(QString("%1").arg());
+        QPixmap img(directory.absoluteFilePath(fileList.at(i)));
+        img = img.scaled(newSize);
+
+        QLabel* pixmapLabel= new QLabel;
+        pixmapLabel->setPixmap(img);
+
+        QGraphicsProxyWidget* item = scene->addWidget(pixmapLabel);
+        gridLayout->addItem(item, 0,i);
+        //gridLayout->addItem(imageItem, 0, i);
+        img.save(finalDir.absoluteFilePath(fileList.at(i)));
     }
 }

@@ -7,6 +7,8 @@
 #include <QGraphicsScene>
 #include <QGraphicsWidget>
 #include <QImage>
+#include <QGraphicsPixmapItem>
+#include <QGraphicsProxyWidget>
 
 namespace Ui {
     class ThumbnailerDialog;
